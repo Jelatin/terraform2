@@ -350,6 +350,8 @@ data "template_file" "ansible_inventory" {
     managers            = join("\n", local.manager_public_ip_list)
     workers             = join("\n", aws_instance.worker.*.public_ip)
     manager_private_ips = join("\n", aws_instance.manager.*.private_ip)
+    workers_private_ips = join("\n", aws_instance.worker.*.private_ip)
+    backup_private_ips = join("\n", aws_instance.backup.*.private_ip)
     efs_host            = var.enable_efs ? "efs dns_name=${aws_efs_mount_target.main[0].dns_name}" : ""
   }
   # managers = "${join("\n", "${var.eip_allocation_id == "null" ? aws_instance.manager.*.public_ip : local.manager_public_ip_list}")}"
@@ -361,6 +363,8 @@ resource "null_resource" "ansible_inventory_file" {
     managers            = join("\n", aws_instance.manager.*.public_ip)
     workers             = join("\n", aws_instance.worker.*.public_ip)
     manager_private_ips = join("\n", aws_instance.manager.*.private_ip)
+    workers_private_ips = join("\n", aws_instance.worker.*.private_ip)
+    backup_private_ips = join("\n", aws_instance.backup.*.private_ip)
   }
 
   provisioner "local-exec" {
